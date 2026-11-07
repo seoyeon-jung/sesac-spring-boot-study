@@ -21,9 +21,9 @@ public class GlobalExceptionHandler {
         return Map.of("message", e.getMessage());
     }
 
-    @ExceptionHandler(InvalidItemException.class)
+    @ExceptionHandler(ItemNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, String> handleNotFound(InvalidItemException e) {
+    public Map<String, String> handleNotFound(ItemNotFoundException e) {
         return Map.of("message", e.getMessage());
     }
 
