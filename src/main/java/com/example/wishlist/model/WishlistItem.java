@@ -28,4 +28,9 @@ public class WishlistItem {
     public String toString() {
         return "WishlistItem{id=" + id + ", name='" + name + "', price=" + price + "}";
     }
+
+    // id 부여할때 같은 내용에 id만 붙여서 새로운 객체 생성
+    public WishlistItem withId(Long id) {
+        return new WishlistItem(id, this.name, this.price);
+    }
 }
