@@ -52,13 +52,13 @@ public class WishlistService {
 
     private void validatePrice(Integer price) {
         if (price == null || price < 0) {
-            throw new IllegalArgumentException("가격은 0 이상의 정수여야 합니다.");
+            throw new InvalidItemException("가격은 0 이상의 정수여야 합니다.");
         }
     }
 
     private String validateName(String name) {
         if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("이름은 비어있을 수 없습니다.");
+            throw new InvalidItemException("이름은 비어있을 수 없습니다.");
         }
         return name.strip();
     }
