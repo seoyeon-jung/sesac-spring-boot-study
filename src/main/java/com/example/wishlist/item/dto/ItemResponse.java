@@ -1,6 +1,6 @@
-package com.example.wishlist.dto;
+package com.example.wishlist.item.dto;
 
-import com.example.wishlist.model.WishlistItem;
+import com.example.wishlist.item.model.WishlistItem;
 
 public record ItemResponse(Long id, String name, int price) {
     public static ItemResponse from(WishlistItem item) {

@@ -1,9 +1,9 @@
-package com.example.wishlist.controller;
+package com.example.wishlist.item.controller;
 
-import com.example.wishlist.dto.ItemCreateRequest;
-import com.example.wishlist.dto.ItemResponse;
-import com.example.wishlist.dto.RecommendationResponse;
-import com.example.wishlist.service.WishlistService;
+import com.example.wishlist.item.dto.ItemCreateRequest;
+import com.example.wishlist.item.dto.ItemResponse;
+import com.example.wishlist.item.dto.RecommendationResponse;
+import com.example.wishlist.item.service.WishlistService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

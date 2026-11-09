@@ -1,4 +1,4 @@
-package com.example.wishlist.dto;
+package com.example.wishlist.item.dto;
 
 public record ItemCreateRequest (String name, Integer price) {
 

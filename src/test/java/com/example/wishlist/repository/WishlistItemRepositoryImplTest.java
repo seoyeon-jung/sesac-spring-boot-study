@@ -2,8 +2,8 @@ package com.example.wishlist.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.example.wishlist.model.WishlistItem;
-import java.util.List;
+import com.example.wishlist.item.model.WishlistItem;
+import com.example.wishlist.item.repository.WishlistItemRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
-package com.example.wishlist.repository;
+package com.example.wishlist.item.repository;
 
-import com.example.wishlist.model.WishlistItem;
+import com.example.wishlist.item.model.WishlistItem;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;

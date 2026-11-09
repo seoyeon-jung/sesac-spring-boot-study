@@ -1,14 +1,14 @@
 package com.example.wishlist;
 
 import com.example.wishlist.common.exception.ItemNotFoundException;
-import com.example.wishlist.controller.WishlistController;
-import com.example.wishlist.dto.ItemCreateRequest;
-import com.example.wishlist.dto.ItemResponse;
-import com.example.wishlist.dto.RecommendationResponse;
-import com.example.wishlist.model.WishlistItem;
-import com.example.wishlist.repository.WishlistItemRepository;
-import com.example.wishlist.repository.WishlistItemRepositoryImpl;
-import com.example.wishlist.service.WishlistService;
+import com.example.wishlist.item.controller.WishlistController;
+import com.example.wishlist.item.dto.ItemCreateRequest;
+import com.example.wishlist.item.dto.ItemResponse;
+import com.example.wishlist.item.dto.RecommendationResponse;
+import com.example.wishlist.item.model.WishlistItem;
+import com.example.wishlist.item.repository.WishlistItemRepository;
+import com.example.wishlist.item.repository.WishlistItemRepositoryImpl;
+import com.example.wishlist.item.service.WishlistService;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
