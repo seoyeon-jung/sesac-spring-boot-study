@@ -38,7 +38,7 @@ public class WishlistController {
             .toList();
     }
 
-    @GetMapping("/items/:id")
+    @GetMapping("/items/{id}")
     public ItemResponse findById(@PathVariable Long id) {
         return ItemResponse.from(service.findById(id));
     }
