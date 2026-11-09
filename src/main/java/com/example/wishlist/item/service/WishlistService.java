@@ -1,8 +1,8 @@
 package com.example.wishlist.item.service;
 
-import com.example.wishlist.common.exception.InvalidBudgetException;
-import com.example.wishlist.common.exception.InvalidItemException;
-import com.example.wishlist.common.exception.ItemNotFoundException;
+import com.example.wishlist.item.exception.InvalidBudgetException;
+import com.example.wishlist.item.exception.InvalidItemException;
+import com.example.wishlist.item.exception.ItemNotFoundException;
 import com.example.wishlist.item.model.WishlistItem;
 import com.example.wishlist.item.repository.WishlistItemRepository;
 import java.util.Comparator;

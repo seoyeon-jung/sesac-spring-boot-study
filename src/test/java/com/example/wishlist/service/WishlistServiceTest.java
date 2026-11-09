@@ -3,9 +3,9 @@ package com.example.wishlist.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.example.wishlist.common.exception.InvalidBudgetException;
-import com.example.wishlist.common.exception.InvalidItemException;
-import com.example.wishlist.common.exception.ItemNotFoundException;
+import com.example.wishlist.item.exception.InvalidBudgetException;
+import com.example.wishlist.item.exception.InvalidItemException;
+import com.example.wishlist.item.exception.ItemNotFoundException;
 import com.example.wishlist.item.model.WishlistItem;
 import com.example.wishlist.item.repository.WishlistItemRepositoryImpl;
 import com.example.wishlist.item.service.WishlistService;

@@ -1,6 +1,6 @@
 package com.example.wishlist;
 
-import com.example.wishlist.common.exception.ItemNotFoundException;
+import com.example.wishlist.item.exception.ItemNotFoundException;
 import com.example.wishlist.item.controller.WishlistController;
 import com.example.wishlist.item.dto.ItemCreateRequest;
 import com.example.wishlist.item.dto.ItemResponse;
