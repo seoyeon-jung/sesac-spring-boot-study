@@ -1,6 +1,6 @@
 package com.example.wishlist.item.dto;
 
-import com.example.wishlist.item.model.WishlistItem;
+import com.example.wishlist.item.domain.WishlistItem;
 import java.util.List;
 
 public record RecommendationResponse (int budget, int count, List<ItemResponse> items) {

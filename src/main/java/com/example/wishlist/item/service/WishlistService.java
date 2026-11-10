@@ -3,7 +3,7 @@ package com.example.wishlist.item.service;
 import com.example.wishlist.item.exception.InvalidBudgetException;
 import com.example.wishlist.item.exception.InvalidItemException;
 import com.example.wishlist.item.exception.ItemNotFoundException;
-import com.example.wishlist.item.model.WishlistItem;
+import com.example.wishlist.item.domain.WishlistItem;
 import com.example.wishlist.item.repository.WishlistItemRepository;
 import java.util.Comparator;
 import java.util.List;
@@ -21,9 +21,7 @@ public class WishlistService {
 
     // item 등록
     public WishlistItem register(String name, Integer price) {
-        String savedName = validateName(name);
-        validatePrice(price);
-        return repository.save(new WishlistItem(null, savedName, price));
+        return repository.save(WishlistItem.manual(name, price));
     }
 
     // 전체 조회
@@ -37,6 +35,19 @@ public class WishlistService {
             .orElseThrow(() -> new ItemNotFoundException(id));
     }
 
+    // 이름, 가격 수정
+    public WishlistItem update(Long id, String name, Integer price) {
+        WishlistItem current = findById(id);
+        return repository.update(current.changeTo(name, price));
+    }
+
+    // 삭제
+    public void delete(Long id) {
+        if (!repository.deleteById(id)) {
+            throw new ItemNotFoundException(id);
+        }
+    }
+
     // 추천
     public List<WishlistItem> recommend(Integer budget) {
         if (budget == null || budget < 0) {
@@ -48,19 +59,6 @@ public class WishlistService {
             .sorted(Comparator.comparingInt(WishlistItem::getPrice))
             .limit(MAX_RECOMMENDATION)
             .toList();
-    }
-
-    private void validatePrice(Integer price) {
-        if (price == null || price < 0) {
-            throw new InvalidItemException("가격은 0 이상의 정수여야 합니다.");
-        }
-    }
-
-    private String validateName(String name) {
-        if (name == null || name.isBlank()) {
-            throw new InvalidItemException("이름은 비어있을 수 없습니다.");
-        }
-        return name.strip();
     }
 
 }
