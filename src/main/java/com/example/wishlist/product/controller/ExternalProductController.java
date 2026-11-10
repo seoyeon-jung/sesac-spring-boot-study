@@ -32,7 +32,7 @@ public class ExternalProductController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/serach")
+    @GetMapping("/search")
     public ResponseEntity<ExternalProductPageResponse> search(
         @RequestParam(name = "q", required = false) String q,
         @RequestParam(name = "limit", required = false) Integer limit,
