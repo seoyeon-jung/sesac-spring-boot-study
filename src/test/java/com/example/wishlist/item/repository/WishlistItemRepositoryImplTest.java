@@ -1,4 +1,4 @@
-package com.example.wishlist.repository;
+package com.example.wishlist.item.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

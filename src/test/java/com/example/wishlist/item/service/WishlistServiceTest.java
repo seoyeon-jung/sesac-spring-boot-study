@@ -1,4 +1,4 @@
-package com.example.wishlist.service;
+package com.example.wishlist.item.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -8,7 +8,6 @@ import com.example.wishlist.item.exception.InvalidItemException;
 import com.example.wishlist.item.exception.ItemNotFoundException;
 import com.example.wishlist.item.domain.WishlistItem;
 import com.example.wishlist.item.repository.WishlistItemRepositoryImpl;
-import com.example.wishlist.item.service.WishlistService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
