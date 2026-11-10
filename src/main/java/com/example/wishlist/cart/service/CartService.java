@@ -27,7 +27,7 @@ public class CartService {
     }
 
     // 장바구니에 담기
-    public synchronized CardAddResult add(Long wishlistItemId, int quantity) {
+    public synchronized CartAddResult add(Long wishlistItemId, int quantity) {
         WishlistItem product = wishlistItemRepository.findById(wishlistItemId)
             .orElseThrow(() -> new ItemNotFoundException(wishlistItemId));
 
@@ -36,7 +36,7 @@ public class CartService {
         CartItem added = cart.add(product, quantity);
         cartRepository.save(cart);
 
-        return new CardAddResult(added, cart.getItems().size() > kindsBefore);
+        return new CartAddResult(added, cart.getItems().size() > kindsBefore);
     }
 
     // 수량 변경

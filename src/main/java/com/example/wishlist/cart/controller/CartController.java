@@ -6,7 +6,7 @@ import com.example.wishlist.cart.dto.CartItemResponse;
 import com.example.wishlist.cart.dto.CartQuantityRequest;
 import com.example.wishlist.cart.dto.CartResponse;
 import com.example.wishlist.cart.dto.PricePreviewResponse;
-import com.example.wishlist.cart.service.CardAddResult;
+import com.example.wishlist.cart.service.CartAddResult;
 import com.example.wishlist.cart.service.CartService;
 import java.net.URI;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +45,7 @@ public class CartController {
     @PostMapping("/items")
     public ResponseEntity<CartItemResponse> add(@RequestBody CartAddRequest request) {
         request.validate();
-        CardAddResult result = service.add(request.wishlistItemId(), request.quantity());
+        CartAddResult result = service.add(request.wishlistItemId(), request.quantity());
         CartItemResponse response = CartItemResponse.from(result.item());
 
         if (result.newLine()) {
