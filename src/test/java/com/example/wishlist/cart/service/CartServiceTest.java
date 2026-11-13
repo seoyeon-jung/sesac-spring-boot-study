@@ -6,28 +6,35 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.example.wishlist.cart.domain.CartItem;
 import com.example.wishlist.cart.exception.CartRuleViolationException;
 import com.example.wishlist.cart.exception.InvalidQuantityException;
-import com.example.wishlist.cart.repository.CartRepositoryImpl;
 import com.example.wishlist.coupon.domain.Coupon;
 import com.example.wishlist.coupon.exception.InvalidCouponException;
 import com.example.wishlist.item.domain.WishlistItem;
 import com.example.wishlist.item.exception.ItemNotFoundException;
-import com.example.wishlist.item.repository.WishlistItemRepositoryImpl;
 import com.example.wishlist.item.service.WishlistService;
+import com.example.wishlist.support.DatabaseCleaner;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-public class CartServiceTest {
+@SpringBootTest
+class CartServiceTest {
 
+    @Autowired
     private WishlistService wishlistService;
+
+    @Autowired
     private CartService cartService;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     void setUp() {
-        WishlistItemRepositoryImpl itemRepository = new WishlistItemRepositoryImpl();
-        wishlistService = new WishlistService(itemRepository);
-        cartService = new CartService(new CartRepositoryImpl(), itemRepository);
+        DatabaseCleaner.clear(jdbcTemplate);
     }
 
     @Test

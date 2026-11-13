@@ -1,29 +1,29 @@
 package com.example.wishlist;
 
-import com.example.wishlist.item.exception.ItemNotFoundException;
 import com.example.wishlist.item.controller.WishlistController;
+import com.example.wishlist.item.domain.WishlistItem;
 import com.example.wishlist.item.dto.ItemCreateRequest;
 import com.example.wishlist.item.dto.ItemResponse;
 import com.example.wishlist.item.dto.RecommendationResponse;
-import com.example.wishlist.item.domain.WishlistItem;
+import com.example.wishlist.item.exception.ItemNotFoundException;
 import com.example.wishlist.item.repository.WishlistItemRepository;
-import com.example.wishlist.item.repository.WishlistItemRepositoryImpl;
+import com.example.wishlist.item.repository.DatabaseWishlistItemRepository;
 import com.example.wishlist.item.service.WishlistService;
+import com.example.wishlist.support.DatabaseCleaner;
 import java.net.URI;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.jdbc.core.JdbcTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 class WishlistApplicationTests {
 
 	@Autowired
@@ -35,10 +35,19 @@ class WishlistApplicationTests {
 	@Autowired
 	WishlistItemRepository repository;
 
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+
+	/** DB(위시리스트·장바구니)는 테스트가 끝나도 데이터가 남으므로, 매 테스트 전에 비웁니다. */
+	@BeforeEach
+	void clearTable() {
+		DatabaseCleaner.clear(jdbcTemplate);
+	}
+
 	@Test
-	@DisplayName("Spring이 Repository interface에 메모리 구현체를 주입한다")
+	@DisplayName("Spring이 Repository interface에 DB 구현체를 주입한다")
 	void repositoryIsWired() {
-		assertThat(repository).isInstanceOf(WishlistItemRepositoryImpl.class);
+		assertThat(repository).isInstanceOf(DatabaseWishlistItemRepository.class);
 	}
 
 	@Test
@@ -57,7 +66,7 @@ class WishlistApplicationTests {
 	}
 
 	@Test
-	@DisplayName("Controller > Service > Repository 연동 성공, DTO 응답 성공")
+	@DisplayName("Controller > Service > Repository 연동 성공, ResponseEntity로 상태 코드와 DTO 응답")
 	void progressSuccess() {
 		ResponseEntity<ItemResponse> created = controller.register(new ItemCreateRequest(" 지구 끝의 온실 ", 18000));
 		controller.register(new ItemCreateRequest("무료 전자책 샘플", 0));

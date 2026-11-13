@@ -1,4 +1,5 @@
 package com.example.wishlist;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -15,8 +16,10 @@ import com.example.wishlist.item.dto.ItemImportRequest;
 import com.example.wishlist.item.dto.ItemResponse;
 import com.example.wishlist.item.exception.DuplicateImportException;
 import com.example.wishlist.product.client.ProductClient;
+import com.example.wishlist.support.DatabaseCleaner;
 import com.example.wishlist.support.FakeProductClient;
 import java.net.URI;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +29,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-// 외부 상품 가져오기 → 장바구니 → 쿠폰 미리보기까지 Spring이 연결한 빈으로 확인
+/**
+ * 통합 테스트: 외부 상품 가져오기 → 장바구니 → 쿠폰 미리보기까지 Spring이 연결한 빈으로 확인
+ *
+ * 실제 dummyjson.com 대신 FakeProductClient를 @Primary 빈으로 등록합니다.
+ * Service들이 ProductClient "인터페이스"에 의존하기 때문에 가능한 방법입니다.
+ */
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class ShoppingFlowIntegrationTest {
+class ShoppingFlowIntegrationTest {
 
     @TestConfiguration
     static class FakeClientConfig {
@@ -49,6 +56,15 @@ public class ShoppingFlowIntegrationTest {
 
     @Autowired
     CartController cartController;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    /** DB(위시리스트·장바구니)는 테스트가 끝나도 데이터가 남으므로, 매 테스트 전에 비웁니다. */
+    @BeforeEach
+    void clearTable() {
+        DatabaseCleaner.clear(jdbcTemplate);
+    }
 
     @Test
     @DisplayName("가져오기 → 직접 등록 → 장바구니 담기 → 쿠폰 미리보기 → 최적 쿠폰")

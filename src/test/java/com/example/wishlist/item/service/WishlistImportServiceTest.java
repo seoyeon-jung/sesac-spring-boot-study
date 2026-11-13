@@ -6,23 +6,33 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.example.wishlist.item.domain.SourceType;
 import com.example.wishlist.item.domain.WishlistItem;
 import com.example.wishlist.item.exception.DuplicateImportException;
-import com.example.wishlist.item.repository.WishlistItemRepositoryImpl;
+import com.example.wishlist.item.repository.WishlistItemRepository;
 import com.example.wishlist.product.exception.ExternalApiException;
 import com.example.wishlist.product.exception.ExternalProductNotFoundException;
+import com.example.wishlist.support.DatabaseCleaner;
 import com.example.wishlist.support.FakeProductClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-public class WishlistImportServiceTest {
+@SpringBootTest
+class WishlistImportServiceTest {
 
-    private WishlistItemRepositoryImpl repository;
+    @Autowired
+    private WishlistItemRepository repository;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     private FakeProductClient client;
     private WishlistImportService importService;
 
     @BeforeEach
     void setUp() {
-        repository = new WishlistItemRepositoryImpl();
+        DatabaseCleaner.clear(jdbcTemplate);
         client = new FakeProductClient()
             .add(1L, "Essence Mascara Lash Princess", "9.99", 3)
             .add(2L, "Sold Out Book", "12.5", 0);

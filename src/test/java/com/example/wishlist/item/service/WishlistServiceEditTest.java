@@ -7,20 +7,30 @@ import com.example.wishlist.item.domain.WishlistItem;
 import com.example.wishlist.item.exception.ImportedItemNotEditableException;
 import com.example.wishlist.item.exception.InvalidItemException;
 import com.example.wishlist.item.exception.ItemNotFoundException;
-import com.example.wishlist.item.repository.WishlistItemRepositoryImpl;
+import com.example.wishlist.item.repository.WishlistItemRepository;
+import com.example.wishlist.support.DatabaseCleaner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-public class WishlistServiceEditTest {
+@SpringBootTest
+class WishlistServiceEditTest {
 
-    private WishlistItemRepositoryImpl repository;
+    @Autowired
+    private WishlistItemRepository repository;
+
+    @Autowired
     private WishlistService service;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     void setUp() {
-        repository = new WishlistItemRepositoryImpl();
-        service = new WishlistService(repository);
+        DatabaseCleaner.clear(jdbcTemplate);
     }
 
     @Test

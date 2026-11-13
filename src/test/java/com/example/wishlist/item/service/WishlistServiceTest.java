@@ -3,24 +3,32 @@ package com.example.wishlist.item.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.example.wishlist.item.domain.WishlistItem;
 import com.example.wishlist.item.exception.InvalidBudgetException;
 import com.example.wishlist.item.exception.InvalidItemException;
 import com.example.wishlist.item.exception.ItemNotFoundException;
-import com.example.wishlist.item.domain.WishlistItem;
-import com.example.wishlist.item.repository.WishlistItemRepositoryImpl;
+import com.example.wishlist.support.DatabaseCleaner;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
+@SpringBootTest
 public class WishlistServiceTest {
 
+    @Autowired
     private WishlistService service;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     void setUp() {
-        service = new WishlistService(new WishlistItemRepositoryImpl());
+        DatabaseCleaner.clear(jdbcTemplate);
     }
 
     @Nested
@@ -109,7 +117,9 @@ public class WishlistServiceTest {
                 .isInstanceOf(InvalidItemException.class);
             assertThatThrownBy(() -> service.register("test", -1000))
                 .isInstanceOf(InvalidItemException.class);
-            assertThat(service.findAll()).containsExactlyElementsOf(before);
+            // DB는 조회할 때마다 새 객체를 만들므로, 같은 객체인지가 아니라 "필드 값"이 같은지 비교
+            assertThat(service.findAll()).usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyElementsOf(before);
         }
 
         @Test
@@ -172,7 +182,9 @@ public class WishlistServiceTest {
             List<WishlistItem> before = service.findAll();
             service.recommend(5000);
 
-            assertThat(service.findAll()).containsExactlyElementsOf(before);
+            // DB는 조회할 때마다 새 객체를 만들므로, 같은 객체인지가 아니라 "필드 값"이 같은지 비교
+            assertThat(service.findAll()).usingRecursiveFieldByFieldElementComparator()
+                .containsExactlyElementsOf(before);
             assertThat(service.findAll()).extracting(WishlistItem::getName)
                 .containsExactly("데미안", "무료 전자책 샘플", "어린 왕자", "노인과 바다", "동물농장");
         }
