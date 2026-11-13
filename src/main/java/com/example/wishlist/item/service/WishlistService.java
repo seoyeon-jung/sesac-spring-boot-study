@@ -4,6 +4,7 @@ import com.example.wishlist.item.exception.InvalidBudgetException;
 import com.example.wishlist.item.exception.InvalidItemException;
 import com.example.wishlist.item.exception.ItemNotFoundException;
 import com.example.wishlist.item.domain.WishlistItem;
+import com.example.wishlist.item.repository.DatabaseWishlistItemRepository;
 import com.example.wishlist.item.repository.WishlistItemRepository;
 import java.util.Comparator;
 import java.util.List;
@@ -13,9 +14,9 @@ import org.springframework.stereotype.Service;
 public class WishlistService {
 
     private static final int MAX_RECOMMENDATION = 3;
-    private final WishlistItemRepository repository;
+    private final DatabaseWishlistItemRepository repository;
 
-    public WishlistService(WishlistItemRepository repository) {
+    public WishlistService(DatabaseWishlistItemRepository repository) {
         this.repository = repository;
     }
 

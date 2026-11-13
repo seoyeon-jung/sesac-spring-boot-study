@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
-@Repository
+//@Repository
 public class WishlistItemRepositoryImpl implements WishlistItemRepository{
 
     private final Map<Long, WishlistItem> store = new LinkedHashMap<>();

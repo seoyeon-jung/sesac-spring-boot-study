@@ -107,4 +107,9 @@ public class WishlistItem {
         return "WishlistItem{id=" + id + ", name='" + name + "', price=" + price
             + ", sourceType=" + sourceType + ", externalId=" + externalId + ", stock=" + stock + "}";
     }
+
+    // DB -> domain
+    public static WishlistItem restore(Long id, String name, int price, SourceType sourceType, Long externalId, Integer stock) {
+        return new WishlistItem(id, name, price, sourceType, externalId, stock);
+    }
 }
