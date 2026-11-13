@@ -108,4 +108,15 @@ public class Cart {
             }
         }
     }
+
+    // 지금까지 사용한 마지막 행 id (저장소가 저장할 때 사용)
+    public long getLastItemId() {
+        return lastItemId;
+    }
+
+    // DB -> 도메인
+    public static Cart restore(List<CartItem> items, long lastItemId) {
+        long maxId = items.stream().mapToLong(CartItem::getId).max().orElse(0L);
+        return new Cart(new ArrayList<>(items), Math.max(lastItemId, maxId));
+    }
 }

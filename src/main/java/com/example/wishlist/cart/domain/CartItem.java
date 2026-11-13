@@ -104,4 +104,10 @@ public final class CartItem {
         return "CartItem{id=" + id + ", wishlistItemId=" + wishlistItemId + ", name='" + name
             + "', unitPrice=" + unitPrice + ", quantity=" + quantity + ", stockLimit=" + stockLimit + "}";
     }
+
+    // DB -> 도메인
+    public static CartItem restore(Long id, Long wishlistItemId, String name,
+        long unitPrice, int quantity, Integer stockLimit) {
+        return new CartItem(id, wishlistItemId, name, unitPrice, quantity, stockLimit);
+    }
 }

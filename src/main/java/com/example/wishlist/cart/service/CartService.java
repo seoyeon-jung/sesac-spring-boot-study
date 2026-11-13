@@ -3,21 +3,23 @@ package com.example.wishlist.cart.service;
 import com.example.wishlist.cart.domain.Cart;
 import com.example.wishlist.cart.domain.CartItem;
 import com.example.wishlist.cart.repository.CartRepository;
+import com.example.wishlist.cart.repository.DatabaseCartRepository;
 import com.example.wishlist.coupon.domain.Coupon;
 import com.example.wishlist.coupon.domain.CouponComparison;
 import com.example.wishlist.coupon.domain.PriceBreakdown;
 import com.example.wishlist.item.domain.WishlistItem;
 import com.example.wishlist.item.exception.ItemNotFoundException;
+import com.example.wishlist.item.repository.DatabaseWishlistItemRepository;
 import com.example.wishlist.item.repository.WishlistItemRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CartService {
 
-    private final CartRepository cartRepository;
-    private final WishlistItemRepository wishlistItemRepository;
+    private final DatabaseCartRepository cartRepository;
+    private final DatabaseWishlistItemRepository wishlistItemRepository;
 
-    public CartService(CartRepository cartRepository, WishlistItemRepository wishlistItemRepository) {
+    public CartService(DatabaseCartRepository cartRepository, DatabaseWishlistItemRepository wishlistItemRepository) {
         this.cartRepository = cartRepository;
         this.wishlistItemRepository = wishlistItemRepository;
     }

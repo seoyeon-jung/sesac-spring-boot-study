@@ -3,7 +3,7 @@ package com.example.wishlist.cart.repository;
 import com.example.wishlist.cart.domain.Cart;
 import org.springframework.stereotype.Repository;
 
-@Repository
+//@Repository
 public class CartRepositoryImpl implements CartRepository {
 
     private Cart cart = new Cart();
