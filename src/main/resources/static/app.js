@@ -135,6 +135,17 @@ async function loadCompare(originalUrl) {
     }
 }
 
+function groupByChannel(items) {
+    const groups = new Map();
+    items.forEach(item => {
+        const group = groups.get(item.channel) ?? { channel: item.channel, linkCount: 0, redirectCount: 0 };
+        group.linkCount += 1;
+        group.redirectCount += item.redirectCount;
+        groups.set(item.channel, group);
+    });
+    return [...groups.values()].sort((a, b) => b.redirectCount - a.redirectCount);
+}
+
 function renderCompare(total, items) {
     const tbody = $('compare-table').querySelector('tbody');
     tbody.replaceChildren();
@@ -146,23 +157,25 @@ function renderCompare(total, items) {
         return;
     }
 
-    $('compare-summary').textContent = `채널 ${items.length}개 · 총 클릭 ${total.toLocaleString()}회`;
+    const groups = groupByChannel(items);
+    $('compare-summary').textContent =
+        `채널 ${groups.length}개 · 링크 ${items.length}개 · 총 클릭 ${total.toLocaleString()}회`;
     $('compare-summary').hidden = false;
 
-    const maxCount = Math.max(...items.map(item => item.redirectCount), 1);
+    const maxCount = Math.max(...groups.map(group => group.redirectCount), 1);
 
-    items.forEach(item => {
+    groups.forEach(group => {
         const tr = document.createElement('tr');
-        tr.appendChild(cell(item.channel));
-        tr.appendChild(linkCell(item.shortenUrl));
-        tr.appendChild(cell(item.redirectCount.toLocaleString(), 'num'));
+        tr.appendChild(cell(group.channel));
+        tr.appendChild(cell(group.linkCount.toLocaleString(), 'num'));
+        tr.appendChild(cell(group.redirectCount.toLocaleString(), 'num'));
 
         const barTd = document.createElement('td');
         const track = document.createElement('div');
         track.className = 'bar-track';
         const fill = document.createElement('div');
         fill.className = 'bar-fill';
-        fill.style.width = `${(item.redirectCount / maxCount) * 100}%`;
+        fill.style.width = `${(group.redirectCount / maxCount) * 100}%`;
         track.appendChild(fill);
         barTd.appendChild(track);
         tr.appendChild(barTd);
@@ -172,7 +185,6 @@ function renderCompare(total, items) {
 
     $('compare-table').hidden = false;
 }
-
 // ===== 3. 최근 만든 링크 =====
 
 $('refresh-button').addEventListener('click', loadRecent);
