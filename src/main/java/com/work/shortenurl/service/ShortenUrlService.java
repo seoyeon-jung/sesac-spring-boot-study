@@ -1,6 +1,6 @@
 package com.work.shortenurl.service;
 
-import com.work.shortenurl.controller.AppProperties;
+import com.work.shortenurl.config.AppProperties;
 import com.work.shortenurl.domain.ShortenUrl;
 import com.work.shortenurl.dto.ShortenUrlCreateRequest;
 import com.work.shortenurl.dto.ShortenUrlCreateResponse;
@@ -27,10 +27,14 @@ public class ShortenUrlService {
     private final ShortenUrlRepository shortenUrlRepository;
     private final KeyGenerator keyGenerator;
     private final AppProperties appProperties;
+    private final UrlValidator urlValidator;
 
     // 단축 URL 생성
     @Transactional
     public ShortenUrlCreateResponse createShortenUrl(ShortenUrlCreateRequest request) {
+        String originalUrl = request.originalUrl().trim();
+        urlValidator.validate(originalUrl);
+
         String shortenUrlKey = generateUniqueKey();
         ShortenUrl shortenUrl = new ShortenUrl(
                 request.originalUrl().trim(),
@@ -60,7 +64,7 @@ public class ShortenUrlService {
     public ShortenUrlListResponse getShortenUrls(String originalUrl) {
         List<ShortenUrl> shortenUrls = (originalUrl == null || originalUrl.isBlank())
                 ? shortenUrlRepository.findAllOrderByCreatedAtDesc()
-                : shortenUrlRepository.findAllByOriginalUrlOrderByRedirectCountDesc(originalUrl);
+                : shortenUrlRepository.findAllByOriginalUrlOrderByRedirectCountDesc(originalUrl.trim());
         return ShortenUrlListResponse.of(shortenUrls, appProperties.baseUrl());
     }
 
