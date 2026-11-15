@@ -18,6 +18,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -119,8 +121,16 @@ public class ShortenUrlControllerTest {
     }
 
     @Test
-    void 없는_키로_접속하면_404_SHORTEN_URL_NOT_FOUND를_반환한다() throws Exception {
+    void 없는_키로_접속하면_404_안내_페이지를_반환한다() throws Exception {
         mockMvc.perform(get("/zzzz9999"))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(content().string(containsString("존재하지 않는 링크")));
+    }
+
+    @Test
+    void API로_없는_키를_조회하면_JSON_404를_반환한다() throws Exception {
+        mockMvc.perform(get("/api/shorten-urls/zzzz9999"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("SHORTEN_URL_NOT_FOUND"));
     }
