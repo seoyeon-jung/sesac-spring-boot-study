@@ -1,4 +1,4 @@
-package com.work.shortenurl.controller;
+package com.work.shortenurl.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
