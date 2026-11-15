@@ -1,0 +1,54 @@
+package com.work.shortenurl.service;
+
+import com.work.shortenurl.controller.AppProperties;
+import com.work.shortenurl.domain.ShortenUrl;
+import com.work.shortenurl.dto.ShortenUrlCreateRequest;
+import com.work.shortenurl.dto.ShortenUrlCreateResponse;
+import com.work.shortenurl.dto.ShortenUrlInformation;
+import com.work.shortenurl.exception.LackOfShortenUrlKeyException;
+import com.work.shortenurl.exception.NotFoundShortenUrlException;
+import com.work.shortenurl.keygen.KeyGenerator;
+import com.work.shortenurl.repository.ShortenUrlRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class ShortenUrlService {
+
+    private static final int MAX_RETRY = 5;
+
+    private final ShortenUrlRepository shortenUrlRepository;
+    private final KeyGenerator keyGenerator;
+    private final AppProperties appProperties;
+
+    @Transactional
+    public ShortenUrlCreateResponse createShortenUrl(ShortenUrlCreateRequest request) {
+        String shortenUrlKey = generateUniqueKey();
+        ShortenUrl shortenUrl = new ShortenUrl(
+                request.originalUrl().trim(),
+                shortenUrlKey,
+                request.channel()
+        );
+        ShortenUrl saved = shortenUrlRepository.save(shortenUrl);
+        return ShortenUrlCreateResponse.of(saved, appProperties.baseUrl());
+    }
+
+    public ShortenUrlInformation getShortenUrlInformation(String shortenUrlKey) {
+        ShortenUrl shortenUrl = shortenUrlRepository.findByShortenUrlKey(shortenUrlKey)
+                .orElseThrow(() -> new NotFoundShortenUrlException(shortenUrlKey));
+        return ShortenUrlInformation.of(shortenUrl, appProperties.baseUrl());
+    }
+
+    private String generateUniqueKey() {
+        for (int i = 0; i < MAX_RETRY; i++) {
+            String key = keyGenerator.generate();
+            if (!shortenUrlRepository.existsByShortenUrlKey(key)) {
+                return key;
+            }
+        }
+        throw new LackOfShortenUrlKeyException();
+    }
+}
