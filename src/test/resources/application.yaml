@@ -5,3 +5,5 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+app:
+  base-url: ${APP_BASE_URL:http://localhost:8080}
